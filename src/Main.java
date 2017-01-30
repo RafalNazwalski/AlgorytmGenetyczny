@@ -13,7 +13,8 @@ public class Main {
         DecimalFormat df = new DecimalFormat("#.0");
 
         //deklaracja zmiennych wprowadzanych przez usera
-        int liczebnosc_rodzicow, ilosc_pokolen, wspolczynnik_a, wspolczynnik_b;
+        int liczebnosc_rodzicow, ilosc_pokolen, wspolczynnik_a, wspolczynnik_b, wspolczynnik_c, wspolczynnik_d;
+        int najlepszyX = 0;
 
         float Pk, Pm;
         float najlepszyZawodnik = 0;
@@ -71,17 +72,21 @@ public class Main {
         System.out.print("\nWprowadz wspolczynnik mutowania (z zakresu 0-1 uzywajac przecinka): ");
         Pm = odczyt.nextFloat();
         System.out.println("\nPodaj wspolczynniki funkcji przystosowania: \n");
-        System.out.print("Wspolczynnik 1 = ");
+        System.out.print("Wspolczynnik x^3 = ");
         wspolczynnik_a = odczyt.nextInt();
-        System.out.print("Wspolczynnik 2 = ");
+        System.out.print("Wspolczynnik x^2 = ");
         wspolczynnik_b = odczyt.nextInt();
+        System.out.print("Wspolczynnik x^1 = ");
+        wspolczynnik_c = odczyt.nextInt();
+        System.out.print("Wspolczynnik x^0 = ");
+        wspolczynnik_d = odczyt.nextInt();
 
         //glowna petla wykonujaca sie w zaleznosci od ilosci pokolen
         for (m = 0; m < ilosc_pokolen; m++) {
 
-            //obliczamy funkcje prystowania dla kazdego rodzica
+            //obliczamy funkcje przystowania dla kazdego rodzica
             for (j = 0; j < liczebnosc_rodzicow; j++) {
-                RODZICE_FUNKCJA[j] = (wspolczynnik_a * GRUPA_RODZICIELSKA[j] + wspolczynnik_b); // do zmiany jesli dodamy wiecej parametrow
+                RODZICE_FUNKCJA[j] = ( wspolczynnik_a * GRUPA_RODZICIELSKA[j] * GRUPA_RODZICIELSKA[j] * GRUPA_RODZICIELSKA[j] + wspolczynnik_b * GRUPA_RODZICIELSKA[j] * GRUPA_RODZICIELSKA[j] + wspolczynnik_c * GRUPA_RODZICIELSKA[j] + wspolczynnik_d); // do zmiany jesli dodamy wiecej parametrow
                 suma += RODZICE_FUNKCJA[j];
             }
 
@@ -136,7 +141,7 @@ public class Main {
 
             System.out.println("\nKrzyzowanie:\n");
 
-            //Petla krzyzowania. Krzyrzowan jest o polowe mniej niz osobników bo biora udzial 2 osobniki wiec warunkiem wykonania petli jest liczebnosc_rodzicow/2
+            //Petla krzyzowania. Krzyzowan jest o polowe mniej niz osobników bo biora udzial 2 osobniki wiec warunkiem wykonania petli jest liczebnosc_rodzicow/2
             //do operacji bitowych wykorzystujemy dwie dablice piecio elementowe (maxymalna wartosc potomka 31 co oznacza 11111 czyli 5 liczb
             for (i = 0; i < liczebnosc_rodzicow / 2; i++) {
                 //dwóch potomków z dziesietnych zamieniamy na binarna reprezentacje i zapisujemy do tablic tymczasowych
@@ -244,7 +249,7 @@ public class Main {
             suma = 0;
 
             for (k = 0; k < liczebnosc_rodzicow; k++) {
-                POTOMKOWIE_FUNKCJA[k] = ((wspolczynnik_a * POTOMKOWIE[k]) + wspolczynnik_b);
+                POTOMKOWIE_FUNKCJA[k] = ( (wspolczynnik_a * GRUPA_RODZICIELSKA[k] * GRUPA_RODZICIELSKA[k] * GRUPA_RODZICIELSKA[k]) + (wspolczynnik_b * GRUPA_RODZICIELSKA[k] * GRUPA_RODZICIELSKA[k]) + (wspolczynnik_c * GRUPA_RODZICIELSKA[k]) + wspolczynnik_d);
                 suma += POTOMKOWIE_FUNKCJA[k];
             }
 
@@ -260,9 +265,9 @@ public class Main {
             }
 
 
-            System.out.println("\n\nProcentowe przedstawienei kola ruletki:\n");
+            System.out.println("\n\nProcentowe przedstawienie kola ruletki:\n");
 
-            //wyswitlamy wartosci procentowe kazdego potomka
+            //wyswietlamy wartosci procentowe kazdego potomka
             for (j = 0; j < liczebnosc_rodzicow; j++) {
                 System.out.println("Procent potomek (" + j + 1 + ") = " + TAB_PROCENTY[j]);
             }
@@ -284,6 +289,7 @@ public class Main {
             System.out.println("Wartosc procentowa: " + TAB_PROCENTY[najmocniejszy_osobnik]);
             if (najlepszyZawodnik < POTOMKOWIE_FUNKCJA[najmocniejszy_osobnik]) {
                 najlepszyZawodnik = POTOMKOWIE_FUNKCJA[najmocniejszy_osobnik];
+                najlepszyX = GRUPA_RODZICIELSKA[najmocniejszy_osobnik];
             }
 
 
@@ -313,6 +319,7 @@ public class Main {
         System.out.println();
         System.out.println();
         System.out.println("Najlepszy z najlepszych po " + ilosc_pokolen +  " iteracjach to: " + df.format(najlepszyZawodnik));
+        System.out.println("Najlepszy X: " + najlepszyX);
     }
 
     // funkcja losujaca lczby z zakresu podanego jako parametry
